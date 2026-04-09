@@ -41,4 +41,9 @@ final class Auth
     {
         return (string) ($_SESSION['role'] ?? 'guest');
     }
+
+    public static function hasRole(string $role): bool
+    {
+        return self::role() === $role;
+    }
 }

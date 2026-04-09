@@ -49,4 +49,48 @@ final class AuthController
         Auth::logout();
         return Response::redirect('/');
     }
+
+    public function showForgotPassword(Request $request): Response
+    {
+        return View::render('auth/forgot-password', ['csrfToken' => Csrf::token()]);
+    }
+
+    public function sendResetLink(Request $request): Response
+    {
+        return new Response('Reset link sent (demo).', 200);
+    }
+
+    public function showConfirmPassword(Request $request): Response
+    {
+        return View::render('auth/confirm-password', ['csrfToken' => Csrf::token()]);
+    }
+
+    public function confirmPassword(Request $request): Response
+    {
+        return new Response('Password confirmed (demo).', 200);
+    }
+
+    public function showResetPassword(Request $request): Response
+    {
+        return View::render('auth/reset-password', ['csrfToken' => Csrf::token(), 'token' => (string) $request->input('token', '')]);
+    }
+
+    public function resetPassword(Request $request): Response
+    {
+        return new Response('Password reset completed (demo).', 200);
+    }
+
+    public function profile(Request $request): Response
+    {
+        return View::render('auth/profile', ['userId' => Auth::id(), 'role' => Auth::role()]);
+    }
+
+    public function verifyEmail(Request $request): Response
+    {
+        $token = (string) $request->input('token', '');
+        if ($token === '') {
+            return new Response('Invalid verification token', 422);
+        }
+        return new Response('Email verified (demo).', 200);
+    }
 }

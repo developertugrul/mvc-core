@@ -8,10 +8,24 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
 use App\Core\Application;
+use App\Core\Component\ComponentManager;
+use App\Core\Component\ComponentRegistry;
+use App\Core\Component\ComponentSigner;
 use App\Core\Config;
 use App\Core\Database;
 use App\Core\ErrorHandler;
+use App\Core\Events\EventDispatcher;
 use App\Core\Router;
+use App\Application\Components\CounterComponent;
+use App\Application\Components\LanguageSwitcherComponent;
+use App\Application\Mail\Mailer;
+use App\Application\Notifications\Channels\InAppChannel;
+use App\Application\Notifications\Channels\MailChannel;
+use App\Application\Notifications\Channels\SmsChannel;
+use App\Application\Notifications\Channels\WebPushChannel;
+use App\Application\Notifications\Notifier;
+use App\Application\Observers\UserRegisteredObserver;
+use App\Application\Services\UploadService;
 
 $dotenv = Dotenv::createImmutable(BASE_PATH);
 $dotenv->safeLoad();
@@ -30,9 +44,35 @@ $containerBuilder->addDefinitions([
         return $logger;
     },
     PDO::class => static fn () => Database::makePdo($config),
+    ComponentSigner::class => static fn () => new ComponentSigner($config->string('app_key', 'change-this-key')),
 ]);
 
 $container = $containerBuilder->build();
+global $appContainer;
+$appContainer = $container;
+
+$events = new EventDispatcher();
+$container->set(EventDispatcher::class, $events);
+$container->set(Mailer::class, new Mailer($config));
+$container->set(MailChannel::class, new MailChannel($container->get(Mailer::class), $config));
+$container->set(SmsChannel::class, new SmsChannel());
+$container->set(WebPushChannel::class, new WebPushChannel());
+$container->set(InAppChannel::class, new InAppChannel());
+$container->set(Notifier::class, new Notifier(
+    $container->get(MailChannel::class),
+    $container->get(SmsChannel::class),
+    $container->get(WebPushChannel::class),
+    $container->get(InAppChannel::class)
+));
+$events->listen('user.registered', new UserRegisteredObserver($container->get(Notifier::class)));
+$container->set(UploadService::class, new UploadService($config));
+$container->get(UploadService::class)->ensureDirectories();
+
+$registry = new ComponentRegistry($container);
+$registry->register('counter', CounterComponent::class);
+$registry->register('language-switcher', LanguageSwitcherComponent::class);
+$container->set(ComponentRegistry::class, $registry);
+$container->set(ComponentManager::class, new ComponentManager($registry, $container->get(ComponentSigner::class)));
 
 ErrorHandler::register($container->get(Logger::class), (bool) $config->get('app_debug', false));
 

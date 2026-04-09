@@ -29,12 +29,39 @@ final class Config
             'db_connection' => $_ENV['DB_CONNECTION'] ?? 'mysql',
             'session_secure_cookie' => ($_ENV['SESSION_SECURE_COOKIE'] ?? 'false') === 'true',
             'upload_max_size_mb' => (int) ($_ENV['UPLOAD_MAX_SIZE_MB'] ?? 5),
+            'mail_dsn' => $_ENV['MAIL_DSN'] ?? 'smtp://localhost',
+            'mail_from' => $_ENV['MAIL_FROM'] ?? 'no-reply@example.com',
         ]);
     }
 
     public function get(string $key, mixed $default = null): mixed
     {
         return $this->items[$key] ?? $default;
+    }
+
+    public function string(string $key, string $default = ''): string
+    {
+        return (string) ($this->items[$key] ?? $default);
+    }
+
+    public function bool(string $key, bool $default = false): bool
+    {
+        return (bool) ($this->items[$key] ?? $default);
+    }
+
+    public function int(string $key, int $default = 0): int
+    {
+        return (int) ($this->items[$key] ?? $default);
+    }
+
+    /** @return array<int, string> */
+    public function stringArray(string $key, array $default = []): array
+    {
+        $value = $this->items[$key] ?? $default;
+        if (!is_array($value)) {
+            return $default;
+        }
+        return array_values(array_map('strval', $value));
     }
 
     public function basePath(string $path = ''): string

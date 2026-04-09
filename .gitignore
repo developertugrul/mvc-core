@@ -15,3 +15,7 @@ coverage/
 .vscode/
 Thumbs.db
 .DS_Store
+public/uploads/*
+!public/uploads/.gitkeep
+storage/private/uploads/*
+!storage/private/uploads/.gitkeep

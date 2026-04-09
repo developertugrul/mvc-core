@@ -47,6 +47,9 @@ final class Router
         }
         $handler = $route['handler'];
         $middlewares = $route['middleware'] ?? [];
+        if (isset($route['permission'])) {
+            $request = $request->withAttribute('permission', (string) $route['permission']);
+        }
 
         $pipeline = array_reduce(
             array_reverse($middlewares),
