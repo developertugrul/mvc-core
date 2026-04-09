@@ -45,6 +45,8 @@ final class Config
             'turkcell_sms_token' => $_ENV['TURKCELL_SMS_TOKEN'] ?? '',
             'turktelekom_sms_endpoint' => $_ENV['TURKTELEKOM_SMS_ENDPOINT'] ?? '',
             'turktelekom_sms_token' => $_ENV['TURKTELEKOM_SMS_TOKEN'] ?? '',
+            'oauth_access_token_ttl' => (int) ($_ENV['OAUTH_ACCESS_TOKEN_TTL'] ?? 3600),
+            'oauth_refresh_token_ttl' => (int) ($_ENV['OAUTH_REFRESH_TOKEN_TTL'] ?? 2592000),
         ]);
     }
 

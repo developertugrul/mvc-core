@@ -56,6 +56,7 @@ Bu sistem, sadece "hello world" seviyesinde bir iskelet degil; auth, middleware,
   - sms
   - web push
   - in-app
+- OAuth2 benzeri API token altyapisi (client_credentials/password/refresh_token)
 - SMS provider mimarisi:
   - Twilio
   - Vodafone
@@ -126,6 +127,9 @@ Bu sistem, sadece "hello world" seviyesinde bir iskelet degil; auth, middleware,
   - `/login`, `/register`
   - `/forgot-password`, `/confirm-password`, `/reset-password`
   - `/profile`, `/verify-email`
+- OAuth/API:
+  - `/oauth/token`
+  - `/api/me`
 - Admin:
   - `/admin/dashboard`
 - Sistem:
@@ -164,3 +168,4 @@ Tum detayli anlatimlar `Docs/` altindadir:
 - `Docs/11-Migrations-Seeders-AutoRun.md`
 - `Docs/12-Security-Hardening-Checklist.md`
 - `Docs/13-Uploads-Cron-Observers-Notifications.md`
+- `Docs/14-OAuth2.md`
