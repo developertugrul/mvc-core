@@ -57,7 +57,8 @@ final class AuthController
 
     public function sendResetLink(Request $request): Response
     {
-        return new Response('Reset link sent (demo).', 200);
+        $this->authService->sendPasswordReset((string) $request->input('email', ''));
+        return new Response('If account exists, reset link has been sent.', 200);
     }
 
     public function showConfirmPassword(Request $request): Response
@@ -77,7 +78,10 @@ final class AuthController
 
     public function resetPassword(Request $request): Response
     {
-        return new Response('Password reset completed (demo).', 200);
+        $token = (string) $request->input('token', '');
+        $password = (string) $request->input('password', '');
+        $ok = $this->authService->resetPassword($token, $password);
+        return $ok ? Response::redirect('/login') : new Response('Invalid or expired reset token', 422);
     }
 
     public function profile(Request $request): Response
@@ -91,6 +95,7 @@ final class AuthController
         if ($token === '') {
             return new Response('Invalid verification token', 422);
         }
-        return new Response('Email verified (demo).', 200);
+        $ok = $this->authService->verifyEmail($token);
+        return $ok ? new Response('Email verified successfully.', 200) : new Response('Invalid or expired verification token', 422);
     }
 }

@@ -144,7 +144,7 @@ Bu sistem, sadece "hello world" seviyesinde bir iskelet degil; auth, middleware,
 - SMS kanali sadece kullanicida telefon bilgisi varsa calisir; hardcoded hedef kullanilmaz.
 - Web-push payload'larinda hassas dogrulama tokeni gonderilmez.
 - Locale routing su an `tr|en` desenine sabitlenmistir; yeni locale icin route regex ve dil dosyalari genisletilmelidir.
-- Forgot/confirm/reset/verify akislarinin bir kismi demo seviyesindedir; production icin token persistence + expiry zorunludur.
+- Confirm-password adimi demo seviyesindedir; reset/verify akislarinda token persistence + expiry aktif olarak uygulanmistir.
 
 ## Dokumantasyon
 

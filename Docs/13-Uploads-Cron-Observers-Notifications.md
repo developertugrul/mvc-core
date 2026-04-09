@@ -110,8 +110,8 @@ MAIL_FROM=no-reply@example.com
 Implemented channels:
 
 - mail
-- sms (demo adapter)
-- web_push (demo adapter)
+- sms (provider adapter)
+- web_push (VAPID + service worker)
 - in_app
 
 Core classes:

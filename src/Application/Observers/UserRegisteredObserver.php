@@ -18,11 +18,11 @@ final class UserRegisteredObserver
     {
         $email = (string) ($payload['email'] ?? '');
         $name = (string) ($payload['name'] ?? 'User');
+        $token = (string) ($payload['token'] ?? '');
         if ($email === '') {
             return;
         }
 
-        $token = bin2hex(random_bytes(16));
         $this->notifier->send(new VerifyEmailNotification($name, $email, $token));
     }
 }
