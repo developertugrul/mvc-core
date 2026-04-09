@@ -21,8 +21,16 @@ npm install
 
 ### Step 2: Environment
 
-```bash
+Windows:
+
+```powershell
 copy .env.example .env
+```
+
+Linux/macOS:
+
+```bash
+cp .env.example .env
 ```
 
 Set DB driver:
@@ -33,7 +41,23 @@ DB_CONNECTION=mysql
 
 Alternatives: `pgsql`, `sqlsrv`.
 
+Generate strong `APP_KEY` and set it in `.env`:
+
+PowerShell:
+
+```powershell
+php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"
+```
+
+Bash:
+
+```bash
+php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'
+```
+
 ### Step 3: Migrate and seed
+
+Create your database/schema first, then run:
 
 ```bash
 composer run migrate-seed

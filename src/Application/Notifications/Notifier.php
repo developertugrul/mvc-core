@@ -23,13 +23,17 @@ final class Notifier
     {
         if ($notification instanceof VerifyEmailNotification) {
             foreach ($notification->channels() as $channel) {
-                match ($channel) {
-                    'mail' => $this->mailChannel->send($notification),
-                    'sms' => $this->smsChannel->send($notification),
-                    'web_push' => $this->webPushChannel->send($notification),
-                    'in_app' => $this->inAppChannel->send($notification),
-                    default => null,
-                };
+                try {
+                    match ($channel) {
+                        'mail' => $this->mailChannel->send($notification),
+                        'sms' => $this->smsChannel->send($notification),
+                        'web_push' => $this->webPushChannel->send($notification),
+                        'in_app' => $this->inAppChannel->send($notification),
+                        default => null,
+                    };
+                } catch (\Throwable $e) {
+                    error_log('[notification][' . $channel . '] ' . $e->getMessage());
+                }
             }
         }
     }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="<?= htmlspecialchars(\App\Core\I18n::locale(), ENT_QUOTES, 'UTF-8'); ?>" data-csrf-token="<?= htmlspecialchars((string) $csrfToken, ENT_QUOTES, 'UTF-8'); ?>" data-webpush-public-key="<?= htmlspecialchars((string) $webPushPublicKey, ENT_QUOTES, 'UTF-8'); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,7 @@
     <main class="max-w-3xl mx-auto p-6 space-y-4">
     <h1 class="text-3xl font-bold"><?= htmlspecialchars(__('messages.welcome'), ENT_QUOTES, 'UTF-8'); ?></h1>
     <p class="text-slate-600">Shared hosting compatible starter.</p>
+    <button type="button" id="enable-web-push" class="btn">Enable browser notifications</button>
     <?= component('language-switcher'); ?>
     <?= component('counter', ['start' => 1]); ?>
     <?php if ($isAuthenticated): ?>

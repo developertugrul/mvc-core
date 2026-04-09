@@ -13,8 +13,11 @@ final class CsrfMiddleware implements MiddlewareInterface
 {
     public function handle(Request $request, callable $next): Response
     {
-        if ($request->method === 'POST') {
+        if (in_array($request->method, ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
             $token = (string) $request->input('_csrf', '');
+            if ($token === '') {
+                $token = (string) ($request->server['HTTP_X_CSRF_TOKEN'] ?? '');
+            }
             if (!Csrf::verify($token)) {
                 return new Response('Invalid CSRF token', 419);
             }

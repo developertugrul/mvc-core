@@ -24,6 +24,8 @@ use App\Application\Notifications\Channels\MailChannel;
 use App\Application\Notifications\Channels\SmsChannel;
 use App\Application\Notifications\Channels\WebPushChannel;
 use App\Application\Notifications\Notifier;
+use App\Application\Notifications\Sms\SmsManager;
+use App\Application\Notifications\WebPush\WebPushService;
 use App\Application\Observers\UserRegisteredObserver;
 use App\Application\Services\UploadService;
 
@@ -55,8 +57,10 @@ $events = new EventDispatcher();
 $container->set(EventDispatcher::class, $events);
 $container->set(Mailer::class, new Mailer($config));
 $container->set(MailChannel::class, new MailChannel($container->get(Mailer::class), $config));
-$container->set(SmsChannel::class, new SmsChannel());
-$container->set(WebPushChannel::class, new WebPushChannel());
+$container->set(SmsManager::class, new SmsManager($config));
+$container->set(WebPushService::class, new WebPushService($config));
+$container->set(SmsChannel::class, new SmsChannel($container->get(SmsManager::class)));
+$container->set(WebPushChannel::class, new WebPushChannel($container->get(WebPushService::class)));
 $container->set(InAppChannel::class, new InAppChannel());
 $container->set(Notifier::class, new Notifier(
     $container->get(MailChannel::class),

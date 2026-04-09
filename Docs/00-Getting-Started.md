@@ -16,8 +16,16 @@ npm install
 
 ## 3) Environment
 
-```bash
+Windows:
+
+```powershell
 copy .env.example .env
+```
+
+Linux/macOS:
+
+```bash
+cp .env.example .env
 ```
 
 Set at least:
@@ -26,7 +34,23 @@ Set at least:
 - `DB_CONNECTION`
 - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`
 
+Generate `APP_KEY`:
+
+PowerShell:
+
+```powershell
+php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"
+```
+
+Bash:
+
+```bash
+php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'
+```
+
 ## 4) Database init
+
+Create DB/schema first (example: `mvc_core`) with your DB admin tool.
 
 Manual:
 

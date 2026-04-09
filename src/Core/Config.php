@@ -31,6 +31,20 @@ final class Config
             'upload_max_size_mb' => (int) ($_ENV['UPLOAD_MAX_SIZE_MB'] ?? 5),
             'mail_dsn' => $_ENV['MAIL_DSN'] ?? 'smtp://localhost',
             'mail_from' => $_ENV['MAIL_FROM'] ?? 'no-reply@example.com',
+            'webpush_subject' => $_ENV['WEBPUSH_SUBJECT'] ?? 'mailto:no-reply@example.com',
+            'webpush_public_key' => $_ENV['WEBPUSH_PUBLIC_KEY'] ?? '',
+            'webpush_private_key' => $_ENV['WEBPUSH_PRIVATE_KEY'] ?? '',
+            'sms_provider' => $_ENV['SMS_PROVIDER'] ?? 'twilio',
+            'sms_from' => $_ENV['SMS_FROM'] ?? '',
+            'twilio_sid' => $_ENV['TWILIO_SID'] ?? '',
+            'twilio_token' => $_ENV['TWILIO_TOKEN'] ?? '',
+            'twilio_from' => $_ENV['TWILIO_FROM'] ?? '',
+            'vodafone_sms_endpoint' => $_ENV['VODAFONE_SMS_ENDPOINT'] ?? '',
+            'vodafone_sms_token' => $_ENV['VODAFONE_SMS_TOKEN'] ?? '',
+            'turkcell_sms_endpoint' => $_ENV['TURKCELL_SMS_ENDPOINT'] ?? '',
+            'turkcell_sms_token' => $_ENV['TURKCELL_SMS_TOKEN'] ?? '',
+            'turktelekom_sms_endpoint' => $_ENV['TURKTELEKOM_SMS_ENDPOINT'] ?? '',
+            'turktelekom_sms_token' => $_ENV['TURKTELEKOM_SMS_TOKEN'] ?? '',
         ]);
     }
 

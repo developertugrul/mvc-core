@@ -1,66 +1,154 @@
 # PHP 8.5 MVC Core Starter
 
-Shared-hosting friendly MVC starter with:
+`mvc-core`, paylasimli hosting uyumlu, modern PHP yaklasimlarini benimseyen ve gercek projelere hizli baslangic yapmayi hedefleyen bir MVC starter paketidir.
 
-- PHP 8.5
-- FastRoute based routing
-- Middleware pipeline
-- Session auth + policy/gate
-- Service + repository separation
-- `.env` based configuration
-- Optional locale prefix routing (`/about` and `/tr/about`)
-- TR/EN translations and language settings page
-- MySQL/PostgreSQL/MSSQL PDO support
-- Image, PDF, Excel, CSV helper services
-- Public/private upload visibility model
-- Observer, mail, and multi-channel notifications
-- Cron runner and startup automation
+Bu sistem, sadece "hello world" seviyesinde bir iskelet degil; auth, middleware, policy, coklu dil, upload yonetimi, cron, observer, mail ve bildirim gibi kritik katmanlari birlikte sunan, gelistirilebilir bir temel platformdur.
 
-## Quick Start
+## Bu Sistem Ne Sunuyor?
 
-1. Install dependencies:
+### Cekirdek Mimari
+
+- PHP `8.5` uyumlu
+- FastRoute tabanli routing
+- Middleware pipeline (guvenlik + is kurali odakli)
+- PSR-4 autoload + DI container
+- `.env` tabanli konfig yonetimi
+- Paylasimli hosting icin `public/` webroot modeli
+
+### Uygulama Katmanlari
+
+- Controller -> Service -> Repository ayrimi
+- Policy/Gate tabanli yetki modeli
+- Observer ve event tabanli is akislar
+- Cron task kernel + script runner
+- Startup lock mekanizmasi (ilk acilista migration/seeder)
+
+### Hazir Islevler
+
+- Coklu dil (TR/EN varsayilan) + opsiyonel locale prefix routing
+- Auth sayfalari:
+  - login, register
+  - forgot password, confirm password, reset password
+  - profile, verify email
+- Admin route ayrimi (`admin` middleware)
+- Permission middleware altyapisi
+- Legal sayfalar:
+  - cookie policy
+  - terms of use
+  - privacy policy
+
+### Dosya ve Medya Yonetimi
+
+- Public/private upload ayrimi
+  - `public/uploads`
+  - `storage/private/uploads`
+- Image helper:
+  - resize/crop/quality
+- PDF/Excel/CSV helper:
+  - import/export/download
+
+### Bildirim ve Iletisim
+
+- Mail sistemi (Symfony Mailer)
+- Verify email mail temasi
+- Notification kanallari:
+  - mail
+  - sms
+  - web push
+  - in-app
+- SMS provider mimarisi:
+  - Twilio
+  - Vodafone
+  - Turkcell
+  - Turktelekom
+- Browser tabanli, Firebase'siz Web Push (VAPID + Service Worker)
+
+### Frontend Altyapisi
+
+- TailwindCSS
+- PostCSS + Autoprefixer
+- Esbuild bundling
+- `npm run dev` / `npm run build` akislari
+
+## Bu Sistemle Neler Yapabilirsiniz?
+
+- Kurumsal veya KOBI seviyesinde bir web uygulamasini sifirdan hizlica ayaga kaldirabilirsiniz.
+- Login/register disinda daha kapsamli auth akislarini (sifre sifirlama, email verification) hizla adapte edebilirsiniz.
+- Admin panel + rol/izin bazli yetkilendirme ile cok kullanicili bir SaaS temeli olusturabilirsiniz.
+- Coklu dil destekli, SEO dostu ve locale-aware routing kullanan sayfa yapilari kurabilirsiniz.
+- Raporlama, export/import ve dosya yukleme ihtiyaclarini tek bir starter icinde yonetebilirsiniz.
+- Cron ve observer katmanlari ile periyodik ve event-driven is akislarini ayristirabilirsiniz.
+- Notification sistemi sayesinde ayni olayi birden fazla kanala (mail/sms/web-push/in-app) dagitabilirsiniz.
+
+## Hızlı Baslangic
+
+1. Bagimliliklari kur:
    - `composer install`
    - `npm install`
-2. Create env:
-   - `copy .env.example .env`
-3. Set your DB credentials in `.env`.
-4. Run database setup:
+2. Ortam dosyasini olustur:
+   - Windows: `copy .env.example .env`
+   - Linux/macOS: `cp .env.example .env`
+3. `APP_KEY` uret ve `.env` icine koy:
+   - PowerShell: `php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"`
+   - Bash: `php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'`
+4. Veritabanini olustur (ornek: `mvc_core`) ve baglanti bilgilerini `.env` dosyasina yaz.
+5. Veritabani kurulumunu calistir:
    - `composer run migrate-seed`
-5. Point web root to `public/`.
-6. Build assets:
+6. Asset build al:
    - `npm run build`
-7. Run deploy checks:
+7. Web root'u `public/` olarak ayarla.
+8. Ortam kontrolu calistir:
    - `php scripts/deploy-check.php`
 
-## Routes
+## Temel Komutlar
 
-- `GET /` home
-- `GET|POST /login`
-- `GET|POST /register`
-- `GET|POST /forgot-password`
-- `GET|POST /confirm-password`
-- `GET|POST /reset-password`
-- `GET /profile`
-- `GET /verify-email`
-- `POST /logout`
-- `GET /dashboard` (auth required)
-- `GET /admin/dashboard` (admin middleware)
-- `GET|POST /settings/language`
-- `GET /cookie-policy`
-- `GET /terms-of-use`
-- `GET /privacy-policy`
-- `GET /export/pdf|xlsx|csv`
-- `POST /import/csv`
-- `POST /_components/{name}/{action}`
+- Test:
+  - `composer test`
+- Migration:
+  - `composer run migrate`
+- Seeder:
+  - `composer run seed`
+- Migration + Seeder:
+  - `composer run migrate-seed`
+- Cron:
+  - `composer run cron`
+- VAPID key üret:
+  - `composer run generate-vapid`
+- Asset build:
+  - `npm run build`
 
-## Tests
+## Hazir Route Gruplari (Ozet)
 
-- `composer test`
-- `php scripts/cron-runner.php`
+- Public:
+  - `/`
+  - `/cookie-policy`, `/terms-of-use`, `/privacy-policy`
+- Auth:
+  - `/login`, `/register`
+  - `/forgot-password`, `/confirm-password`, `/reset-password`
+  - `/profile`, `/verify-email`
+- Admin:
+  - `/admin/dashboard`
+- Sistem:
+  - `/_components/{name}/{action}`
+  - `/notifications/web-push/subscribe`
 
-## Docs
+## Neden Bu Starter?
 
-Detailed docs are under `Docs/`:
+- "Sadece calisan kod" degil, "buyuyebilen mimari" sunar.
+- Yeni ozellik eklerken kodu kirmaz; katmanlar ayrik oldugu icin bakimi kolaydir.
+- Paylasimli hosting dahil olmak uzere farkli deployment senaryolarina uygundur.
+- Gercek dunya gereksinimlerini (guvenlik, i18n, bildirim, dosya, cron) erken fazda cozer.
+
+## Uretim Notlari
+
+- SMS kanali sadece kullanicida telefon bilgisi varsa calisir; hardcoded hedef kullanilmaz.
+- Web-push payload'larinda hassas dogrulama tokeni gonderilmez.
+- Locale routing su an `tr|en` desenine sabitlenmistir; yeni locale icin route regex ve dil dosyalari genisletilmelidir.
+- Forgot/confirm/reset/verify akislarinin bir kismi demo seviyesindedir; production icin token persistence + expiry zorunludur.
+
+## Dokumantasyon
+
+Tum detayli anlatimlar `Docs/` altindadir:
 
 - `Docs/00-Getting-Started.md`
 - `Docs/01-Architecture.md`

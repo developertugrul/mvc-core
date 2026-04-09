@@ -11,6 +11,7 @@ $checks[] = ['pdo_mysql OR pdo_pgsql OR pdo_sqlsrv', extension_loaded('pdo_mysql
 $checks[] = ['mbstring extension', extension_loaded('mbstring')];
 $checks[] = ['storage/logs writable', is_writable(__DIR__ . '/../storage/logs')];
 $checks[] = ['storage/cache writable', is_writable(__DIR__ . '/../storage/cache')];
+$checks[] = ['storage/sessions writable', is_writable(__DIR__ . '/../storage/sessions')];
 $checks[] = ['storage/bootstrap writable', is_writable(__DIR__ . '/../storage/bootstrap') || @mkdir(__DIR__ . '/../storage/bootstrap', 0775, true)];
 $checks[] = ['.env exists', file_exists(__DIR__ . '/../.env')];
 $checks[] = ['built CSS exists', file_exists(__DIR__ . '/../public/assets/app.css')];

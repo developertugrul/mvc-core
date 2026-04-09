@@ -9,7 +9,8 @@ final class VerifyEmailNotification extends Notification
     public function __construct(
         public string $name,
         public string $email,
-        public string $token
+        public string $token,
+        public ?string $phone = null
     ) {
     }
 

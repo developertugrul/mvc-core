@@ -9,6 +9,7 @@ use App\Application\Controllers\LanguageController;
 use App\Application\Controllers\FileController;
 use App\Application\Controllers\ComponentController;
 use App\Application\Controllers\LegalController;
+use App\Application\Controllers\NotificationController;
 use App\Application\Middleware\AuthMiddleware;
 use App\Application\Middleware\AdminMiddleware;
 use App\Application\Middleware\CsrfMiddleware;
@@ -42,6 +43,7 @@ use App\Application\Middleware\TrimInputMiddleware;
     ['method' => 'GET', 'uri' => '/cookie-policy', 'handler' => [LegalController::class, 'cookiePolicy']],
     ['method' => 'GET', 'uri' => '/terms-of-use', 'handler' => [LegalController::class, 'termsOfUse']],
     ['method' => 'GET', 'uri' => '/privacy-policy', 'handler' => [LegalController::class, 'privacyPolicy']],
+    ['method' => 'POST', 'uri' => '/notifications/web-push/subscribe', 'handler' => [NotificationController::class, 'subscribeWebPush'], 'middleware' => [CsrfMiddleware::class]],
     ['method' => 'GET', 'uri' => '/export/pdf', 'handler' => [FileController::class, 'exportPdf'], 'middleware' => [AuthMiddleware::class]],
     ['method' => 'GET', 'uri' => '/export/xlsx', 'handler' => [FileController::class, 'exportXlsx'], 'middleware' => [AuthMiddleware::class]],
     ['method' => 'GET', 'uri' => '/export/csv', 'handler' => [FileController::class, 'exportCsv'], 'middleware' => [AuthMiddleware::class]],

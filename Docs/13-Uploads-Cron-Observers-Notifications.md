@@ -120,6 +120,86 @@ Core classes:
 - `VerifyEmailNotification`
 - `Channels/*`
 
+### Web Push (Chrome, Firebase'siz)
+
+- Service worker: `public/sw.js`
+- Browser izin akışı: `Enable browser notifications` butonu
+- Subscription endpoint:
+  - `POST /notifications/web-push/subscribe`
+- Gönderim altyapısı:
+  - `minishlink/web-push` + VAPID key
+- VAPID key üretimi:
+  - `composer run generate-vapid`
+
+`.env`:
+
+```env
+WEBPUSH_SUBJECT=mailto:no-reply@example.com
+WEBPUSH_PUBLIC_KEY=...
+WEBPUSH_PRIVATE_KEY=...
+```
+
+### SMS provider destekleri
+
+`SMS_PROVIDER` seçenekleri:
+
+- `twilio`
+- `vodafone`
+- `turkcell`
+- `turktelekom`
+
+Twilio:
+
+```env
+TWILIO_SID=...
+TWILIO_TOKEN=...
+TWILIO_FROM=+1...
+```
+
+Operatör adapterları doküman bazlı payload ile ayrıştırılmıştır:
+
+- `VodafoneSmsProvider`
+- `TurkcellSmsProvider`
+- `TurkTelekomSmsProvider`
+
+Ortam değişkenleri:
+
+```env
+SMS_FROM=MYBRAND
+VODAFONE_SMS_ENDPOINT=...
+VODAFONE_SMS_TOKEN=...
+TURKCELL_SMS_ENDPOINT=...
+TURKCELL_SMS_TOKEN=...
+TURKTELEKOM_SMS_ENDPOINT=...
+TURKTELEKOM_SMS_TOKEN=...
+```
+
+Not:
+
+- `SMS_FROM`, Vodafone/Turkcell/TurkTelekom adapterlari icin zorunludur.
+- SMS gonderimi, kullaniciya ait telefon bilgisi varsa tetiklenir.
+
+Payload format özeti:
+
+- **Vodafone**
+  - `sender`
+  - `message`
+  - `recipients[].msisdn`
+- **Turkcell**
+  - `from`
+  - `to[]`
+  - `text`
+  - `encoding`
+- **TurkTelekom**
+  - `source_addr`
+  - `destination_addr`
+  - `message`
+  - `is_unicode`
+
+Guvenlik notu:
+
+- Web-push payload'larinda hassas token/secret verileri tasinmaz.
+
 ## 8) Startup + migration behavior
 
 First boot automation:
