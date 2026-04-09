@@ -1,28 +1,35 @@
 # Examples
 
-## Add a new protected route
-
-In `routes/web.php`:
+## Example 1: New localized protected route
 
 ```php
 ['method' => 'GET', 'uri' => '/account', 'handler' => [AccountController::class, 'index'], 'middleware' => [AuthMiddleware::class]]
 ```
 
-## Add a service method
+This becomes available as:
+
+- `/account`
+- `/tr/account`
+- `/en/account`
+
+## Example 2: Component render in view
 
 ```php
-public function changePassword(int $userId, string $newPassword): void
-{
-    $hash = password_hash($newPassword, PASSWORD_DEFAULT);
-    $this->users->updatePassword($userId, $hash);
-}
+<?= component('counter', ['start' => 5]); ?>
 ```
 
-## Add a policy check
+## Example 3: Translatable entity
 
 ```php
-Gate::define('manage-users', fn (string $role): bool => $role === 'admin');
-if (!Gate::allows('manage-users', Auth::role())) {
-    return new Response('Forbidden', 403);
-}
+$content->setTranslation('title', 'tr', 'Baslik');
+$content->setTranslation('title', 'en', 'Title');
+echo $content->translate('title', 'tr', 'en');
+```
+
+## Example 4: Export CSV
+
+```php
+$path = BASE_PATH . '/storage/cache/report.csv';
+$this->documents->exportCsv($rows, $path);
+return Response::download($path, 'report.csv', 'text/csv; charset=UTF-8');
 ```

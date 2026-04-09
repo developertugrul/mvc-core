@@ -1,17 +1,29 @@
 # Service and Repository
 
-## Layering
+## Why this split
 
-- Controllers orchestrate HTTP concerns.
-- Services hold business logic.
-- Repositories isolate database access.
+- Controller: HTTP input/output only
+- Service: business rules and orchestration
+- Repository: persistence only
 
-## Example Flow
+## Example
 
-`AuthController::register()` -> `AuthService::register()` -> `UserRepository::create()`
+Register flow:
 
-Benefits:
+```text
+AuthController::register
+  -> AuthService::register
+    -> UserRepository::create
+```
 
-- better testability
-- reduced controller complexity
-- reusable domain logic
+## Repository rules
+
+- Use prepared statements only.
+- Keep SQL in repository layer.
+- Return simple arrays/DTOs for service consumption.
+
+## Service rules
+
+- Validate business intent.
+- Compose multiple repositories when needed.
+- Throw domain-level exceptions (not HTTP response directly).

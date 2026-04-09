@@ -1,24 +1,37 @@
 # Auth and Policy
 
-## Auth
+## Auth flow
 
-Session-based auth is implemented in `src/Core/Auth.php`.
+1. `AuthController::login()` receives credentials.
+2. `AuthService::attempt()` loads user via repository.
+3. `Auth::attempt()` validates password hash.
+4. Session stores:
+   - `user_id`
+   - `role`
 
-- Login via `AuthService::attempt()`
-- Logout via `Auth::logout()`
-- Session keys: `user_id`, `role`
+Logout:
 
-## Policy and Gate
+- `Auth::logout()` clears session and regenerates id.
 
-Policies live in `src/Application/Policies`.
+## Route protection
 
-`UserPolicy` example:
+- Guest-only pages use `GuestMiddleware`.
+- Protected pages use `AuthMiddleware`.
 
-- `viewAdminDashboard(string $role): bool`
+## Policy and gate
 
-Gate usage:
+`UserPolicy` contains role rules.
+
+Example:
 
 ```php
-Gate::define('view-admin-dashboard', fn (string $role) => $this->policy->viewAdminDashboard($role));
-$allowed = Gate::allows('view-admin-dashboard', Auth::role());
+Gate::define('view-admin-dashboard', fn (string $role): bool => $policy->viewAdminDashboard($role));
+if (!Gate::allows('view-admin-dashboard', Auth::role())) {
+    return new Response('Forbidden', 403);
+}
 ```
+
+## Best practice
+
+- Keep authorization logic out of controllers when possible.
+- Add one policy method per business ability.

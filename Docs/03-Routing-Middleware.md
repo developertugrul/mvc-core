@@ -1,25 +1,50 @@
 # Routing and Middleware
 
-Routes are declared in `routes/web.php`.
+## Route format
 
-Each route item contains:
-
-- `method`
-- `uri`
-- `handler` (`[Controller::class, 'method']`)
-- optional `middleware` array
-
-Example:
+All routes are defined in `routes/web.php` as arrays:
 
 ```php
-['method' => 'GET', 'uri' => '/dashboard', 'handler' => [DashboardController::class, 'index'], 'middleware' => [AuthMiddleware::class]]
+[
+  'method' => 'GET',
+  'uri' => '/dashboard',
+  'handler' => [DashboardController::class, 'index'],
+  'middleware' => [AuthMiddleware::class]
+]
 ```
 
-Middleware execution order is left-to-right in route declaration.
+## Optional locale prefix
 
-Available middleware examples:
+The app generates both:
 
-- `TrimInputMiddleware`
-- `CsrfMiddleware`
-- `GuestMiddleware`
+- `/dashboard`
+- `/{locale}/dashboard` where locale is `tr|en`
+
+This is done automatically when route table is expanded.
+
+## Middleware chain
+
+Execution order is left-to-right.
+
+Global-ish middleware appended on each route:
+
+- `SecurityHeadersMiddleware`
+- `RateLimitMiddleware`
+- `LocaleMiddleware`
+
+Route-specific middleware examples:
+
 - `AuthMiddleware`
+- `GuestMiddleware`
+- `CsrfMiddleware`
+- `TrimInputMiddleware`
+
+## Component endpoint
+
+Livewire-like action endpoint:
+
+```http
+POST /_components/{name}/{action}
+```
+
+Protected by CSRF and signature verification.

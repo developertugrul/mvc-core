@@ -8,6 +8,9 @@
   - `/tr/dashboard`
   - `/en/dashboard`
 - Language settings page: `/settings/language`
+- Translation folders:
+  - `lang/tr/*.php`
+  - `lang/en/*.php`
 
 ## Spatie-like Translatable API
 
@@ -31,3 +34,15 @@ Set `.env`:
 
 - `ImageHelper`: resize/crop/quality and upload-size guard
 - `DocumentHelper`: PDF export, XLSX/CSV export, spreadsheet import
+
+## Livewire-like components
+
+- Base classes under `src/Core/Component`
+- Endpoint:
+  - `POST /_components/{name}/{action}`
+- Signed payload prevents tampering.
+
+## Auto migrate + seed
+
+- `bootstrap/startup.php` runs once with lock:
+  - `storage/bootstrap/migrated.lock`

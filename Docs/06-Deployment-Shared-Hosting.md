@@ -1,23 +1,32 @@
 # Shared Hosting Deployment
 
-## Recommended Deployment Steps
+## Production checklist
 
-1. Upload project files.
-2. Run `composer install --no-dev --optimize-autoloader`.
-3. Copy `.env` and fill production values.
-4. Import SQL migration.
-5. Point domain/subdomain document root to `public/`.
-6. Ensure these paths are writable:
+1. Upload code.
+2. Run:
+   - `composer install --no-dev --optimize-autoloader`
+   - `npm ci && npm run build` (or upload built `public/assets`)
+3. Configure `.env` with production values.
+4. Set web root to `public/`.
+5. Ensure writable:
    - `storage/logs`
    - `storage/cache`
    - `storage/sessions`
+   - `storage/bootstrap`
+6. Run health check:
+   - `php scripts/deploy-check.php`
 
-## Apache
+## Migration strategy
 
-`public/.htaccess` handles clean URL routing.
+- Recommended: run once manually:
+  - `composer run migrate-seed`
+- Optional auto first-boot:
+  - `AUTO_MIGRATE_ON_BOOT=true`
+  - then switch back to `false`
 
-## Security Notes
+## Security hardening
 
-- Keep `.env` outside public access (already outside `public/`).
-- Set `APP_DEBUG=false` in production.
-- Use HTTPS and `SESSION_SECURE_COOKIE=true`.
+- `APP_DEBUG=false`
+- strong `APP_KEY`
+- `SESSION_SECURE_COOKIE=true` on HTTPS
+- do not expose `.env` or `/storage` publicly
