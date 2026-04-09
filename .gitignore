@@ -1,0 +1,17 @@
+vendor/
+node_modules/
+.env
+.env.*
+!.env.example
+storage/logs/*.log
+storage/cache/*
+!storage/cache/.gitkeep
+storage/sessions/*
+!storage/sessions/.gitkeep
+.phpunit.result.cache
+coverage/
+*.log
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store

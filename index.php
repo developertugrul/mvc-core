@@ -1,3 +1,5 @@
 <?php
-require_once 'init.php';
-$system = new System();
+
+declare(strict_types=1);
+
+require __DIR__ . '/public/index.php';

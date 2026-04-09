@@ -1,0 +1,13 @@
+{
+  "name": "mvc-core-starter",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Optional frontend tooling for MVC core starter",
+  "scripts": {
+    "build": "echo \"No frontend build configured yet\"",
+    "dev": "echo \"No frontend dev server configured yet\""
+  },
+  "dependencies": {
+    "axios": "^1.15.0"
+  }
+}
