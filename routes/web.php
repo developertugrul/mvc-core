@@ -10,6 +10,7 @@ use App\Application\Controllers\FileController;
 use App\Application\Controllers\ComponentController;
 use App\Application\Controllers\LegalController;
 use App\Application\Controllers\NotificationController;
+use App\Application\Controllers\OAuthClientController;
 use App\Application\Middleware\AuthMiddleware;
 use App\Application\Middleware\AdminMiddleware;
 use App\Application\Middleware\CsrfMiddleware;
@@ -37,6 +38,10 @@ use App\Application\Middleware\TrimInputMiddleware;
     ['method' => 'POST', 'uri' => '/logout', 'handler' => [AuthController::class, 'logout'], 'middleware' => [CsrfMiddleware::class, AuthMiddleware::class]],
     ['method' => 'GET', 'uri' => '/dashboard', 'handler' => [DashboardController::class, 'index'], 'middleware' => [AuthMiddleware::class]],
     ['method' => 'GET', 'uri' => '/admin/dashboard', 'handler' => [DashboardController::class, 'index'], 'middleware' => [AuthMiddleware::class, AdminMiddleware::class]],
+    ['method' => 'GET', 'uri' => '/admin/oauth-clients', 'handler' => [OAuthClientController::class, 'index'], 'middleware' => [AuthMiddleware::class, AdminMiddleware::class]],
+    ['method' => 'POST', 'uri' => '/admin/oauth-clients', 'handler' => [OAuthClientController::class, 'create'], 'middleware' => [CsrfMiddleware::class, AuthMiddleware::class, AdminMiddleware::class]],
+    ['method' => 'POST', 'uri' => '/admin/oauth-clients/{clientId}/revoke', 'handler' => [OAuthClientController::class, 'revoke'], 'middleware' => [CsrfMiddleware::class, AuthMiddleware::class, AdminMiddleware::class]],
+    ['method' => 'POST', 'uri' => '/admin/oauth-clients/{clientId}/rotate', 'handler' => [OAuthClientController::class, 'rotate'], 'middleware' => [CsrfMiddleware::class, AuthMiddleware::class, AdminMiddleware::class]],
     ['method' => 'GET', 'uri' => '/admin/reports', 'handler' => [DashboardController::class, 'index'], 'middleware' => [AuthMiddleware::class, PermissionMiddleware::class], 'permission' => 'reports.view'],
     ['method' => 'GET', 'uri' => '/settings/language', 'handler' => [LanguageController::class, 'settings'], 'middleware' => [CsrfMiddleware::class, AuthMiddleware::class]],
     ['method' => 'POST', 'uri' => '/settings/language', 'handler' => [LanguageController::class, 'update'], 'middleware' => [CsrfMiddleware::class, AuthMiddleware::class]],

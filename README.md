@@ -130,6 +130,7 @@ Bu sistem, sadece "hello world" seviyesinde bir iskelet degil; auth, middleware,
 - OAuth/API:
   - `/oauth/token`
   - `/api/me`
+  - `/admin/oauth-clients` (admin panel)
 - Admin:
   - `/admin/dashboard`
 - Sistem:

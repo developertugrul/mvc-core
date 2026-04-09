@@ -85,4 +85,39 @@ final class OAuthRepository
         $stmt = $this->db->prepare('UPDATE oauth_refresh_tokens SET revoked_at = NOW() WHERE id = :id');
         $stmt->execute(['id' => $refreshTokenId]);
     }
+
+    /** @return array<int, array<string, mixed>> */
+    public function listClients(): array
+    {
+        $stmt = $this->db->query('SELECT client_id, name, grants, is_active, created_at FROM oauth_clients ORDER BY id DESC');
+        return $stmt->fetchAll() ?: [];
+    }
+
+    public function createClient(string $clientId, string $clientSecretHash, string $name, string $grants): void
+    {
+        $stmt = $this->db->prepare(
+            'INSERT INTO oauth_clients (client_id, client_secret_hash, name, grants, is_active, created_at) VALUES (:client_id, :client_secret_hash, :name, :grants, 1, NOW())'
+        );
+        $stmt->execute([
+            'client_id' => $clientId,
+            'client_secret_hash' => $clientSecretHash,
+            'name' => $name,
+            'grants' => $grants,
+        ]);
+    }
+
+    public function deactivateClient(string $clientId): void
+    {
+        $stmt = $this->db->prepare('UPDATE oauth_clients SET is_active = 0 WHERE client_id = :client_id');
+        $stmt->execute(['client_id' => $clientId]);
+    }
+
+    public function rotateClientSecret(string $clientId, string $secretHash): void
+    {
+        $stmt = $this->db->prepare('UPDATE oauth_clients SET client_secret_hash = :secret_hash WHERE client_id = :client_id');
+        $stmt->execute([
+            'secret_hash' => $secretHash,
+            'client_id' => $clientId,
+        ]);
+    }
 }

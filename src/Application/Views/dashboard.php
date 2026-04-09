@@ -7,6 +7,7 @@
     <p>Role: <?= htmlspecialchars($role, ENT_QUOTES, 'UTF-8'); ?></p>
     <?php if ($canViewAdmin): ?>
         <p>Admin policy granted.</p>
+        <a class="text-blue-600 underline" href="/admin/oauth-clients">Manage OAuth Clients</a><br>
     <?php else: ?>
         <p>Standard user view.</p>
     <?php endif; ?>

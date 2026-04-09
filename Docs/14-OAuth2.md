@@ -51,6 +51,17 @@ curl -X POST http://localhost/oauth/token \
 curl -H "Authorization: Bearer ACCESS_TOKEN" http://localhost/api/me
 ```
 
+## Admin OAuth Client Yonetimi
+
+Web panel endpointleri:
+
+- `GET /admin/oauth-clients`
+- `POST /admin/oauth-clients`
+- `POST /admin/oauth-clients/{clientId}/rotate`
+- `POST /admin/oauth-clients/{clientId}/revoke`
+
+Ekran, yeni olusturulan veya rotate edilen `client_secret` degerini sadece bir kez gosterir.
+
 ## Veritabani Tablolari
 
 - `oauth_clients`
